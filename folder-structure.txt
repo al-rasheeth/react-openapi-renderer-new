@@ -1,0 +1,98 @@
+src/
+├── App/
+│   ├── App.tsx
+│   ├── AppRoutes.tsx
+│   ├── AppLayout.tsx
+│   ├── AppProvider.tsx (for global providers like QueryClient, Router, Theme)
+│   └── constants/
+│       ├── routes.ts
+│       └── config.ts
+│
+├── Features/
+│   ├── auth/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   └── types/
+│   │
+│   ├── onboarding/
+│   │   ├── components/
+│   │   │   ├── WelcomeSlider/
+│   │   │   └── OnboardingSteps/
+│   │   ├── hooks/
+│   │   └── types/
+│   │
+│   ├── api-catalog/
+│   │   ├── components/
+│   │   │   ├── ApiCategoryList/
+│   │   │   ├── ApiServiceList/
+│   │   │   └── ApiDetails/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   └── types/
+│   │
+│   ├── api-studio/
+│   │   ├── components/
+│   │   │   ├── ApiEditor/
+│   │   │   ├── ImportService/
+│   │   │   └── ApiPlayground/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   └── types/
+│   │
+│   └── devops/
+│       ├── components/
+│       │   ├── GithubRepoCreator/
+│       │   └── JenkinsPipelineBuilder/
+│       ├── hooks/
+│       ├── services/
+│       └── types/
+│
+├── Shared/
+│   ├── components/
+│   │   ├── common/
+│   │   │   ├── Button/
+│   │   │   ├── Input/
+│   │   │   └── Card/
+│   │   ├── layout/
+│   │   │   ├── Header/
+│   │   │   ├── Footer/
+│   │   │   └── Sidebar/
+│   │   └── feedback/
+│   │       ├── Toast/
+│   │       └── Modal/
+│   │
+│   ├── hooks/
+│   │   ├── useAuth.ts
+│   │   ├── useTheme.ts
+│   │   └── useApi.ts
+│   │
+│   ├── utils/
+│   │   ├── api/
+│   │   │   ├── axios.ts
+│   │   │   └── interceptors.ts
+│   │   ├── formatters/
+│   │   ├── validators/
+│   │   └── helpers/
+│   │
+│   ├── types/
+│   │   ├── common.ts
+│   │   └── api.ts
+│   │
+│   ├── constants/
+│   │   ├── theme.ts
+│   │   └── api.ts
+│   │
+│   └── store/
+│       ├── slices/
+│       └── index.ts
+│
+├── assets/
+│   ├── images/
+│   ├── icons/
+│   └── styles/
+│       ├── global.css
+│       └── variables.css
+│
+└── types/
+    └── global.d.ts
