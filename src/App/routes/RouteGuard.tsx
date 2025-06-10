@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { ROUTES } from './constants';
-import { useAuthStore } from '../../Shared/store';
+import { useAuthStore } from '../../Features/auth/store';
 import type { RouteGuardProps } from './types';
 
 const RouteGuard = ({ route, children }: RouteGuardProps) => {
