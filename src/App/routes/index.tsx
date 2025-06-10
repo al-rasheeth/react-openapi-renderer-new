@@ -7,18 +7,7 @@ import AppLayout from '../../Shared/components/layout/AppLayout';
 const AppRoutes = () => {
   return (
     <Routes>
-      {publicRoutes.map((route) => (
-        <Route
-          key={route.path}
-          path={route.path}
-          element={
-            <RouteGuard route={route}>
-              {route.layout ? <AppLayout>{route.element}</AppLayout> : route.element}
-            </RouteGuard>
-          }
-        />
-      ))}
-      {protectedRoutes.map((route) => (
+      {[...publicRoutes, ...protectedRoutes].map((route) => (
         <Route
           key={route.path}
           path={route.path}

@@ -12,4 +12,37 @@ export const ROUTES = {
     REGISTER: '/auth/register',
     FORGOT_PASSWORD: '/auth/forgot-password',
   },
+} as const;
+
+export const ROUTE_META = {
+  HOME: {
+    title: 'Home',
+    breadcrumb: 'Home',
+  },
+  CATEGORIES: {
+    title: 'Categories',
+    breadcrumb: 'Categories',
+  },
+  API_DETAILS: {
+    title: 'API Details',
+    breadcrumb: 'API Details',
+  },
+  AUTH: {
+    LOGIN: {
+      title: 'Login',
+      breadcrumb: 'Login',
+    },
+    REGISTER: {
+      title: 'Register',
+      breadcrumb: 'Register',
+    },
+    FORGOT_PASSWORD: {
+      title: 'Forgot Password',
+      breadcrumb: 'Forgot Password',
+    },
+  },
+  STUDIO: {
+    title: 'API Studio',
+    breadcrumb: 'API Studio',
+  },
 } as const; 

@@ -20,14 +20,26 @@ export interface UserPermissions {
   permissions: Permission[];
 }
 
+export interface RouteMeta {
+  title?: string;
+  breadcrumb?: string;
+  icon?: ReactNode;
+  requiresAuth?: boolean;
+  roles?: string[];
+  permissions?: string[];
+}
+
 export interface RouteConfig {
   path: string;
   element: ReactNode;
-  children?: RouteConfig[];
-  auth?: boolean;
   layout?: boolean;
-  permissions?: Permission[];
-  roles?: Role[];
+  meta?: RouteMeta;
+  children?: RouteConfig[];
+}
+
+export interface RouteGuardProps {
+  route: RouteConfig;
+  children: ReactNode;
 }
 
 export interface RouteGroup {
