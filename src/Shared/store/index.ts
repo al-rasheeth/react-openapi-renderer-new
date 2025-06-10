@@ -1,11 +1,16 @@
 import { create } from 'zustand';
+import type { AuthSlice } from './slices/authSlice';
+import type { UISlice } from './slices/uiSlice';
+import { createAuthSlice } from './slices/authSlice';
+import { createUISlice } from './slices/uiSlice';
 
-interface AppState {
-  isLoading: boolean;
-  setLoading: (loading: boolean) => void;
-}
+// Create separate stores for each slice
+export const useAuthStore = create<AuthSlice>()(createAuthSlice);
+export const useUIStore = create<UISlice>()(createUISlice);
 
-export const useAppStore = create<AppState>((set) => ({
-  isLoading: false,
-  setLoading: (loading) => set({ isLoading: loading }),
-})); 
+// Optional: Create a hook to use multiple stores together
+export const useStores = () => {
+  const auth = useAuthStore();
+  const ui = useUIStore();
+  return { auth, ui };
+}; 

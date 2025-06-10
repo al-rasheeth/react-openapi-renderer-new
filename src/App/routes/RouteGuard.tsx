@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { ROUTES } from './constants';
-import { useAuthStore } from '../../Shared/store/authStore';
+import { useAuthStore } from '../../Shared/store';
 import type { RouteGuardProps } from './types';
 
 const RouteGuard = ({ route, children }: RouteGuardProps) => {
@@ -17,14 +17,14 @@ const RouteGuard = ({ route, children }: RouteGuardProps) => {
   if (route.meta?.roles) {
     const userRoles = ['user']; // TODO: Replace with actual user roles
     const hasRequiredRole = route.meta.roles.some((role) => userRoles.includes(role));
-
+    
     if (!hasRequiredRole) {
       return <Navigate to={ROUTES.HOME} replace />;
     }
   }
 
   // Check permissions
-  if (route.meta?.permissions && !hasAllPermissions(route.meta?.permissions)) {
+  if (route.meta?.permissions && !hasAllPermissions(route.meta.permissions)) {
     return <Navigate to={ROUTES.HOME} state={{ from: location }} replace />;
   }
 

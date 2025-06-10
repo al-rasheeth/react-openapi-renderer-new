@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import type { UserPermissions, Permission, Role } from '../../App/routes/types';
+import type { StateCreator } from 'zustand';
+import type { UserPermissions, Permission, Role } from '../../../App/routes/types';
 
-interface AuthState extends UserPermissions {
+export interface AuthSlice extends UserPermissions {
   isAuthenticated: boolean;
   setAuth: (isAuthenticated: boolean) => void;
   setPermissions: (permissions: UserPermissions) => void;
@@ -11,7 +11,7 @@ interface AuthState extends UserPermissions {
   hasAllPermissions: (permissions: Permission[]) => boolean;
 }
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => ({
   isAuthenticated: false,
   roles: [],
   permissions: [],
@@ -23,4 +23,4 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     permissions.some((permission) => get().permissions.includes(permission)),
   hasAllPermissions: (permissions) => 
     permissions.every((permission) => get().permissions.includes(permission)),
-})); 
+}); 
