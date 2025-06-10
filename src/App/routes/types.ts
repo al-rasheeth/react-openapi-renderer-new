@@ -25,8 +25,8 @@ export interface RouteMeta {
   breadcrumb?: string;
   icon?: ReactNode;
   requiresAuth?: boolean;
-  roles?: string[];
-  permissions?: string[];
+  roles?: Role[];
+  permissions?: Permission[];
 }
 
 export interface RouteConfig {

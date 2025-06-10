@@ -1,18 +1,11 @@
-import type { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { ROUTES } from './constants';
 import { useAuthStore } from '../../Shared/store/authStore';
-import type { RouteConfig } from './types';
 import type { RouteGuardProps } from './types';
-
-interface RouteGuardProps {
-  children: ReactNode;
-  route: RouteConfig;
-}
 
 const RouteGuard = ({ route, children }: RouteGuardProps) => {
   const location = useLocation();
-  const { isAuthenticated, hasAllPermissions, hasAnyPermission, hasRole } = useAuthStore();
+  const { isAuthenticated, hasAllPermissions } = useAuthStore();
 
   // Check if route requires authentication
   if (route.meta?.requiresAuth && !isAuthenticated) {
@@ -24,14 +17,14 @@ const RouteGuard = ({ route, children }: RouteGuardProps) => {
   if (route.meta?.roles) {
     const userRoles = ['user']; // TODO: Replace with actual user roles
     const hasRequiredRole = route.meta.roles.some((role) => userRoles.includes(role));
-    
+
     if (!hasRequiredRole) {
       return <Navigate to={ROUTES.HOME} replace />;
     }
   }
 
   // Check permissions
-  if (route.permissions && !hasAllPermissions(route.permissions)) {
+  if (route.meta?.permissions && !hasAllPermissions(route.meta?.permissions)) {
     return <Navigate to={ROUTES.HOME} state={{ from: location }} replace />;
   }
 
