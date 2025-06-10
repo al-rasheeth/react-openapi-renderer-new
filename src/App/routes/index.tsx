@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { publicRoutes } from './publicRoutes';
 import { protectedRoutes } from './protectedRoutes';
 import RouteGuard from './RouteGuard';
-import AppLayout from '../AppLayout';
+import AppLayout from '../../Shared/components/layout/AppLayout';
 
 const AppRoutes = () => {
   return (

@@ -1,14 +1,16 @@
 import { BrowserRouter } from 'react-router-dom';
 import AppRoutes from './routes';
-import AppProvider from './AppProvider';
+import { QueryProvider, ThemeProvider } from './providers';
 
 function App() {
   return (
-    <AppProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </AppProvider>
+    <QueryProvider>
+      <ThemeProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </ThemeProvider>
+    </QueryProvider>
   );
 }
 
