@@ -1,29 +1,31 @@
 import { Box, Container, Grid, Typography, Paper } from '@mui/material';
-import CodeIcon from '@mui/icons-material/Code';
-import ApiIcon from '@mui/icons-material/Api';
-import StorageIcon from '@mui/icons-material/Storage';
-import SecurityIcon from '@mui/icons-material/Security';
+import {
+  Search as SearchIcon,
+  Code as CodeIcon,
+  Speed as SpeedIcon,
+  Security as SecurityIcon,
+} from '@mui/icons-material';
 
 const features = [
   {
-    icon: <ApiIcon sx={{ fontSize: 40 }} />,
-    title: 'Comprehensive API Catalog',
-    description: 'Browse through our extensive collection of APIs, organized by categories and services.',
+    icon: <SearchIcon sx={{ fontSize: 40 }} />,
+    title: 'API Discovery',
+    description: 'Browse through thousands of APIs across various categories and find the perfect one for your needs.',
   },
   {
     icon: <CodeIcon sx={{ fontSize: 40 }} />,
-    title: 'Interactive API Studio',
-    description: 'Test and experiment with APIs in real-time using our powerful API Studio.',
+    title: 'API Studio',
+    description: 'Test and experiment with APIs in real-time using our powerful API Studio interface.',
   },
   {
-    icon: <StorageIcon sx={{ fontSize: 40 }} />,
-    title: 'Detailed Documentation',
-    description: 'Access comprehensive documentation, examples, and integration guides.',
+    icon: <SpeedIcon sx={{ fontSize: 40 }} />,
+    title: 'Performance Analytics',
+    description: 'Monitor API performance, response times, and reliability with detailed analytics.',
   },
   {
     icon: <SecurityIcon sx={{ fontSize: 40 }} />,
-    title: 'Secure & Reliable',
-    description: 'Enterprise-grade security and reliability for all your API integrations.',
+    title: 'Secure Integration',
+    description: 'Safely integrate APIs with built-in security features and authentication management.',
   },
 ];
 
@@ -38,7 +40,7 @@ const FeaturesSection = () => {
           gutterBottom
           sx={{ mb: 6 }}
         >
-          Platform Features
+          Powerful Features
         </Typography>
         <Grid container spacing={4}>
           {features.map((feature, index) => (
@@ -64,17 +66,22 @@ const FeaturesSection = () => {
                   sx={{
                     color: 'primary.main',
                     mb: 2,
-                    p: 1,
-                    borderRadius: 1,
-                    bgcolor: 'primary.light',
                   }}
                 >
                   {feature.icon}
                 </Box>
-                <Typography variant="h6" component="h3" gutterBottom>
+                <Typography
+                  variant="h5"
+                  component="h3"
+                  gutterBottom
+                  sx={{ fontWeight: 600 }}
+                >
                   {feature.title}
                 </Typography>
-                <Typography variant="body1" color="text.secondary">
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                >
                   {feature.description}
                 </Typography>
               </Paper>
