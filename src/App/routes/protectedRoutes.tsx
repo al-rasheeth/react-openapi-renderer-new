@@ -1,5 +1,6 @@
 import { ROUTES } from './constants';
 import type { RouteConfig } from './types';
+import ServiceListPage from '../../Features/api-catalog/pages/ServiceListPage';
 
 export const protectedRoutes: RouteConfig[] = [
   {
@@ -19,7 +20,7 @@ export const protectedRoutes: RouteConfig[] = [
   },
   {
     path: ROUTES.SERVICES,
-    element: <div>Services List (Coming Soon)</div>,
+    element: <ServiceListPage />,
     layout: true,
     auth: true,
     permissions: ['view:services'],

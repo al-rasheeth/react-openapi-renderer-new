@@ -1,18 +1,8 @@
 import { ROUTES } from './constants';
 import type { RouteConfig } from './types';
-import { Container, Typography } from '@mui/material';
-import ApiCategoryList from '../../Features/api-catalog/components/ApiCategoryList/ApiCategoryList';
-
-const HomePage = () => (
-  <Container>
-    <Typography variant="h4" component="h1" gutterBottom>
-      Welcome to API Documentation
-    </Typography>
-    <Typography variant="body1">
-      Explore our comprehensive API documentation and tools.
-    </Typography>
-  </Container>
-);
+import CategoryListPage from '../../Features/api-catalog/pages/CategoryListPage';
+import HomePage from '../../Features/home/pages/HomePage';
+import ApiDetailsPage from '../../Features/api-catalog/pages/ApiDetailsPage';
 
 export const publicRoutes: RouteConfig[] = [
   {
@@ -22,7 +12,12 @@ export const publicRoutes: RouteConfig[] = [
   },
   {
     path: ROUTES.CATEGORIES,
-    element: <ApiCategoryList />,
+    element: <CategoryListPage />,
+    layout: true,
+  },
+  {
+    path: ROUTES.API_DETAILS,
+    element: <ApiDetailsPage />,
     layout: true,
   },
   {
