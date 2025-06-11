@@ -12,35 +12,36 @@ export const ROUTES = {
     REGISTER: '/auth/register',
     FORGOT_PASSWORD: '/auth/forgot-password',
   },
-  OPENAPI_RENDERER: '/openapi-renderer',
-  OPENAPI_VALIDATOR: '/openapi-validator',
+  OPENAPI_RENDERER: '/openapi/renderer',
+  OPENAPI_VALIDATOR: '/openapi/validator',
+  OPENAPI_EDITOR: '/openapi/editor',
 } as const;
 
 export const ROUTE_META = {
   HOME: {
     title: 'Home',
-    breadcrumb: 'Home',
+    description: 'Welcome to the API Catalog',
   },
   CATEGORIES: {
     title: 'Categories',
-    breadcrumb: 'Categories',
+    description: 'Browse API categories',
   },
   API_DETAILS: {
     title: 'API Details',
-    breadcrumb: 'API Details',
+    description: 'View API details',
   },
   AUTH: {
     LOGIN: {
       title: 'Login',
-      breadcrumb: 'Login',
+      description: 'Login to your account',
     },
     REGISTER: {
       title: 'Register',
-      breadcrumb: 'Register',
+      description: 'Create a new account',
     },
     FORGOT_PASSWORD: {
       title: 'Forgot Password',
-      breadcrumb: 'Forgot Password',
+      description: 'Reset your password',
     },
   },
   STUDIO: {
@@ -49,10 +50,14 @@ export const ROUTE_META = {
   },
   OPENAPI_RENDERER: {
     title: 'OpenAPI Renderer',
-    breadcrumb: 'OpenAPI Renderer',
+    description: 'View OpenAPI documentation',
   },
   OPENAPI_VALIDATOR: {
     title: 'OpenAPI Validator',
-    breadcrumb: 'OpenAPI Validator',
+    description: 'Validate OpenAPI specifications',
+  },
+  OPENAPI_EDITOR: {
+    title: 'OpenAPI Editor',
+    description: 'Edit and preview OpenAPI specifications',
   },
 } as const; 
