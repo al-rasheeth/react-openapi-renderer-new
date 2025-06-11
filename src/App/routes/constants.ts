@@ -12,6 +12,7 @@ export const ROUTES = {
     REGISTER: '/auth/register',
     FORGOT_PASSWORD: '/auth/forgot-password',
   },
+  OPENAPI_RENDERER: '/openapi-renderer',
 } as const;
 
 export const ROUTE_META = {
@@ -44,5 +45,9 @@ export const ROUTE_META = {
   STUDIO: {
     title: 'API Studio',
     breadcrumb: 'API Studio',
+  },
+  OPENAPI_RENDERER: {
+    title: 'OpenAPI Renderer',
+    breadcrumb: 'OpenAPI Renderer',
   },
 } as const; 

@@ -3,6 +3,7 @@ import type { RouteConfig } from './types';
 import CategoryListPage from '../../Features/api-catalog/pages/CategoryListPage';
 import HomePage from '../../Features/home/pages/HomePage';
 import ApiDetailsPage from '../../Features/api-catalog/pages/ApiDetailsPage';
+import { OpenAPIRendererPage } from '../../Features/openapi/pages/OpenAPIRendererPage';
 
 export const publicRoutes: RouteConfig[] = [
   {
@@ -40,5 +41,11 @@ export const publicRoutes: RouteConfig[] = [
     element: <div>Forgot Password Page (Coming Soon)</div>,
     layout: false,
     meta: ROUTE_META.AUTH.FORGOT_PASSWORD,
+  },
+  {
+    path: ROUTES.OPENAPI_RENDERER,
+    element: <OpenAPIRendererPage />,
+    layout: false,
+    meta: ROUTE_META.OPENAPI_RENDERER,
   },
 ]; 
