@@ -13,6 +13,7 @@ export const ROUTES = {
     FORGOT_PASSWORD: '/auth/forgot-password',
   },
   OPENAPI_RENDERER: '/openapi-renderer',
+  OPENAPI_VALIDATOR: '/openapi-validator',
 } as const;
 
 export const ROUTE_META = {
@@ -49,5 +50,9 @@ export const ROUTE_META = {
   OPENAPI_RENDERER: {
     title: 'OpenAPI Renderer',
     breadcrumb: 'OpenAPI Renderer',
+  },
+  OPENAPI_VALIDATOR: {
+    title: 'OpenAPI Validator',
+    breadcrumb: 'OpenAPI Validator',
   },
 } as const; 

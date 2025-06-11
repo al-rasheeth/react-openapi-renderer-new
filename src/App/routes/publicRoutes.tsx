@@ -4,6 +4,7 @@ import CategoryListPage from '../../Features/api-catalog/pages/CategoryListPage'
 import HomePage from '../../Features/home/pages/HomePage';
 import ApiDetailsPage from '../../Features/api-catalog/pages/ApiDetailsPage';
 import { OpenAPIRendererPage } from '../../Features/openapi/pages/OpenAPIRendererPage';
+import { OpenAPIValidatorPage } from '../../Features/openapi-validator/pages/OpenAPIValidatorPage';
 
 export const publicRoutes: RouteConfig[] = [
   {
@@ -47,5 +48,11 @@ export const publicRoutes: RouteConfig[] = [
     element: <OpenAPIRendererPage />,
     layout: false,
     meta: ROUTE_META.OPENAPI_RENDERER,
+  },
+  {
+    path: ROUTES.OPENAPI_VALIDATOR,
+    element: <OpenAPIValidatorPage />,
+    layout: false,
+    meta: ROUTE_META.OPENAPI_VALIDATOR,
   },
 ]; 
