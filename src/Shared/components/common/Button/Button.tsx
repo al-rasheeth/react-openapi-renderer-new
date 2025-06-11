@@ -1,9 +1,8 @@
-import { Button as MuiButton } from '@mui/material';
-import type { ButtonProps as MuiButtonProps } from '@mui/material';
+import { Button as MuiButton, ButtonProps as MuiButtonProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-export interface ButtonProps extends MuiButtonProps {
-  isLoading?: boolean;
+interface ButtonProps extends MuiButtonProps {
+  loading?: boolean;
 }
 
 const StyledButton = styled(MuiButton)(({ theme }) => ({
@@ -18,10 +17,13 @@ const StyledButton = styled(MuiButton)(({ theme }) => ({
   },
 }));
 
-export const Button = ({ children, isLoading, disabled, ...props }: ButtonProps) => {
+const Button = ({ loading, disabled, children, ...props }: ButtonProps) => {
   return (
-    <StyledButton disabled={isLoading || disabled} {...props}>
-      {isLoading ? 'Loading...' : children}
+    <StyledButton
+      disabled={loading || disabled}
+      {...props}
+    >
+      {children}
     </StyledButton>
   );
 };
