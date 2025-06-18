@@ -5,7 +5,7 @@ export const sampleSpec: OpenAPIDocument = {
     info: {
         title: "Sample API",
         version: "1.0.0",
-        description: "A sample API to demonstrate the OpenAPI renderer"
+        description: "A sample API to demonstrate the OpenAPI renderer with all edge cases"
     },
     servers: [
         {
@@ -14,49 +14,368 @@ export const sampleSpec: OpenAPIDocument = {
         }
     ],
     tags: [
-        {
-            name: "Users",
-            description: "User management endpoints"
-        },
-        {
-            name: "Products",
-            description: "Product management endpoints"
-        }
+        { name: "Users", description: "User management endpoints" },
+        { name: "Products", description: "Product management endpoints" },
+        { name: "EdgeCases", description: "Edge case endpoints" }
     ],
     paths: {
+        "/edge/enums": {
+            post: {
+                operationId: "postEnum",
+                summary: "Enum and default value example",
+                tags: ["EdgeCases"],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    status: {
+                                        type: "string",
+                                        enum: ["active", "inactive", "pending"],
+                                        default: "active",
+                                        description: "User status"
+                                    },
+                                    role: {
+                                        type: "string",
+                                        enum: ["admin", "user", "guest"],
+                                        example: "user"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "200": {
+                        description: "Enum response",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "string",
+                                    enum: ["ok", "fail"]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/edge/oneof": {
+            post: {
+                operationId: "postOneOf",
+                summary: "oneOf example",
+                tags: ["EdgeCases"],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                oneOf: [
+                                    { type: "string", description: "A string value" },
+                                    { type: "integer", description: "An integer value" }
+                                ],
+                                description: "Accepts either a string or an integer"
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "200": {
+                        description: "oneOf response",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    oneOf: [
+                                        { type: "string" },
+                                        { type: "integer" }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/edge/anyof": {
+            post: {
+                operationId: "postAnyOf",
+                summary: "anyOf example",
+                tags: ["EdgeCases"],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                anyOf: [
+                                    { type: "string" },
+                                    { type: "integer" },
+                                    { type: "boolean" }
+                                ],
+                                description: "Accepts string, integer, or boolean"
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "200": {
+                        description: "anyOf response",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    anyOf: [
+                                        { type: "string" },
+                                        { type: "integer" },
+                                        { type: "boolean" }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/edge/allof": {
+            post: {
+                operationId: "postAllOf",
+                summary: "allOf example",
+                tags: ["EdgeCases"],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                allOf: [
+                                    {
+                                        type: "object",
+                                        properties: {
+                                            a: { type: "string" }
+                                        }
+                                    },
+                                    {
+                                        type: "object",
+                                        properties: {
+                                            b: { type: "integer" }
+                                        }
+                                    }
+                                ],
+                                description: "Combines properties from multiple schemas"
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "200": {
+                        description: "allOf response",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    allOf: [
+                                        {
+                                            type: "object",
+                                            properties: {
+                                                a: { type: "string" }
+                                            }
+                                        },
+                                        {
+                                            type: "object",
+                                            properties: {
+                                                b: { type: "integer" }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/edge/nullable": {
+            post: {
+                operationId: "postNullable",
+                summary: "nullable and pattern example",
+                tags: ["EdgeCases"],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    nickname: {
+                                        type: "string",
+                                        nullable: true,
+                                        pattern: "^[a-zA-Z0-9_]{3,16}$",
+                                        description: "Optional nickname, 3-16 chars, alphanumeric or underscore"
+                                    },
+                                    age: {
+                                        type: "integer",
+                                        minimum: 0,
+                                        maximum: 120,
+                                        description: "Age must be between 0 and 120"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "200": {
+                        description: "nullable response",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        result: { type: "string", nullable: true }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/edge/nested": {
+            post: {
+                operationId: "postNested",
+                summary: "Deeply nested objects and arrays",
+                tags: ["EdgeCases"],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    user: {
+                                        type: "object",
+                                        properties: {
+                                            profile: {
+                                                type: "object",
+                                                properties: {
+                                                    addresses: {
+                                                        type: "array",
+                                                        items: {
+                                                            type: "object",
+                                                            properties: {
+                                                                street: { type: "string" },
+                                                                city: { type: "string" },
+                                                                phones: {
+                                                                    type: "array",
+                                                                    items: { type: "string" }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "200": {
+                        description: "Nested response",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: { type: "boolean" },
+                                        data: {
+                                            type: "array",
+                                            items: {
+                                                type: "array",
+                                                items: {
+                                                    type: "object",
+                                                    properties: {
+                                                        value: { type: "string" }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/edge/additional": {
+            post: {
+                operationId: "postAdditional",
+                summary: "additionalProperties and mixed types",
+                tags: ["EdgeCases"],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                additionalProperties: {
+                                    oneOf: [
+                                        { type: "string" },
+                                        { type: "integer" },
+                                        { type: "boolean" }
+                                    ]
+                                },
+                                description: "Object with arbitrary string/integer/boolean values"
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "200": {
+                        description: "additionalProperties response",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    additionalProperties: {
+                                        oneOf: [
+                                            { type: "string" },
+                                            { type: "integer" },
+                                            { type: "boolean" }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             get: {
                 operationId: "getUsers",
                 summary: "Get all users",
                 description: "Retrieve a list of all users in the system",
                 tags: ["Users"],
-                parameters: [
-                    {
-                        name: "page",
-                        in: "query",
-                        description: "Page number for pagination",
-                        required: false,
-                        schema: {
-                            type: "integer",
-                            format: "int32"
-                        }
-                    },
-                    {
-                        name: "limit",
-                        in: "query",
-                        description: "Number of items per page",
-                        required: false,
-                        schema: {
-                            type: "integer",
-                            format: "int32"
-                        }
-                    }
-                ],
                 responses: {
                     "200": {
                         description: "Successful response",
                         content: {
                             "application/json": {
+                                schema: {
+                                    type: "array",
+                                    items: {
+                                        type: "object",
+                                        properties: {
+                                            id: { type: "string" },
+                                            name: { type: "string" },
+                                            email: { type: "string", format: "email" }
+                                        }
+                                    }
+                                }
+                            },
+                            "application/xml": {
                                 schema: {
                                     type: "array",
                                     items: {
@@ -90,6 +409,37 @@ export const sampleSpec: OpenAPIDocument = {
                                     age: { type: "integer", description: "User's age" }
                                 }
                             }
+                        },
+                        "application/xml": {
+                            schema: {
+                                type: "object",
+                                required: ["name", "email"],
+                                properties: {
+                                    name: { type: "string" },
+                                    email: { type: "string", format: "email" },
+                                    age: { type: "integer" }
+                                }
+                            }
+                        },
+                        "multipart/form-data": {
+                            schema: {
+                                type: "object",
+                                required: ["name", "profileImage"],
+                                properties: {
+                                    name: { type: "string" },
+                                    profileImage: { type: "string", format: "binary", description: "Profile image file" }
+                                }
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            schema: {
+                                type: "object",
+                                required: ["name", "email"],
+                                properties: {
+                                    name: { type: "string" },
+                                    email: { type: "string", format: "email" }
+                                }
+                            }
                         }
                     }
                 },
@@ -98,6 +448,16 @@ export const sampleSpec: OpenAPIDocument = {
                         description: "User created successfully",
                         content: {
                             "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        id: { type: "string" },
+                                        name: { type: "string" },
+                                        email: { type: "string" }
+                                    }
+                                }
+                            },
+                            "application/xml": {
                                 schema: {
                                     type: "object",
                                     properties: {
@@ -144,6 +504,16 @@ export const sampleSpec: OpenAPIDocument = {
                                         email: { type: "string" }
                                     }
                                 }
+                            },
+                            "application/xml": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        id: { type: "string" },
+                                        name: { type: "string" },
+                                        email: { type: "string" }
+                                    }
+                                }
                             }
                         }
                     },
@@ -170,6 +540,15 @@ export const sampleSpec: OpenAPIDocument = {
                     required: true,
                     content: {
                         "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    name: { type: "string" },
+                                    email: { type: "string" }
+                                }
+                            }
+                        },
+                        "application/xml": {
                             schema: {
                                 type: "object",
                                 properties: {
@@ -236,8 +615,102 @@ export const sampleSpec: OpenAPIDocument = {
                                         }
                                     }
                                 }
+                            },
+                            "application/xml": {
+                                schema: {
+                                    type: "array",
+                                    items: {
+                                        type: "object",
+                                        properties: {
+                                            id: { type: "string" },
+                                            name: { type: "string" },
+                                            price: { type: "number", format: "float" },
+                                            category: { type: "string" }
+                                        }
+                                    }
+                                }
                             }
                         }
+                    }
+                }
+            },
+            post: {
+                operationId: "createProduct",
+                summary: "Create a new product",
+                tags: ["Products"],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                required: ["name", "price"],
+                                properties: {
+                                    name: { type: "string" },
+                                    price: { type: "number", format: "float" },
+                                    category: { type: "string" }
+                                }
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            schema: {
+                                type: "object",
+                                required: ["name", "price"],
+                                properties: {
+                                    name: { type: "string" },
+                                    price: { type: "number", format: "float" },
+                                    category: { type: "string" }
+                                }
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "201": {
+                        description: "Product created successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        id: { type: "string" },
+                                        name: { type: "string" },
+                                        price: { type: "number", format: "float" },
+                                        category: { type: "string" }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        description: "Invalid request data"
+                    }
+                }
+            }
+        },
+        "/files": {
+            post: {
+                operationId: "uploadFile",
+                summary: "Upload a file",
+                tags: ["Products"],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "multipart/form-data": {
+                            schema: {
+                                type: "object",
+                                required: ["file"],
+                                properties: {
+                                    file: { type: "string", format: "binary", description: "The file to upload" },
+                                    description: { type: "string", description: "File description" }
+                                }
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "201": {
+                        description: "File uploaded successfully"
                     }
                 }
             }
