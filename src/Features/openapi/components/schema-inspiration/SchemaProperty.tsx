@@ -213,4 +213,4 @@ export const SchemaProperty: React.FC<SchemaPropertyProps> = ({
       </Collapse>
     </Box>
   );
-}; 
+};

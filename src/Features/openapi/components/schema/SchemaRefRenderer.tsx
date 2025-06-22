@@ -1,28 +1,37 @@
-import { Box, Tooltip, IconButton } from "@mui/material";
-import { SchemaProperty } from "./SchemaProperty";
-import { schemaStyles } from "./SchemaStyles";
-import CodeIcon from '@mui/icons-material/Code';
-import React from "react";
+import { Box, Typography, Chip } from "@mui/material";
 
 interface SchemaRefRendererProps {
     refValue: string;
     isRawView: boolean;
     onToggle: () => void;
-    level: number;
+    level?: number;
 }
 
-export const SchemaRefRenderer: React.FC<SchemaRefRendererProps> = ({ refValue, isRawView, onToggle, level }) => (
-    <Box component="pre" sx={{ ...schemaStyles.container, pl: level * 2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <SchemaProperty 
-                name="$ref" 
-                description={refValue}
-            />
-            <Tooltip title="Switch to raw view">
-                <IconButton onClick={onToggle} size="small" sx={{ ml: 1 }}>
-                    <CodeIcon fontSize="small" />
-                </IconButton>
-            </Tooltip>
+export const SchemaRefRenderer: React.FC<SchemaRefRendererProps> = ({
+    refValue,
+    isRawView,
+    onToggle,
+    level = 0
+}) => {
+    const refName = refValue.split('/').pop() || 'Unknown';
+
+    return (
+        <Box sx={{ pl: level * 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                <Typography variant="body2" sx={{ fontFamily: 'monospace', color: 'text.secondary' }}>
+                    Reference:
+                </Typography>
+                <Chip 
+                    label={refName} 
+                    size="small" 
+                    color="primary" 
+                    variant="outlined"
+                    sx={{ fontFamily: 'monospace' }}
+                />
+            </Box>
+            <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: 'monospace' }}>
+                {refValue}
+            </Typography>
         </Box>
-    </Box>
-); 
+    );
+}; 

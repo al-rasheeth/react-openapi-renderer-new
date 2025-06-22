@@ -19,18 +19,9 @@ import {
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
-import type { OpenAPIV3 } from 'openapi-types';
 import { SchemaProperty } from './SchemaProperty';
 import { RawViewer } from './RawViewer';
 import { ExampleViewer } from './ExampleViewer';
-import { useSchemaRenderer } from '../../hooks/useSchemaRenderer';
-import { mergeAllOfSchemas } from './mergeAllOfSchemas';
-import { ComposedSchemaRenderer } from './ComposedSchemaRenderer';
-import { SchemaRefRenderer } from './SchemaRefRenderer';
-import { ArraySchemaRenderer } from './ArraySchemaRenderer';
-import { ObjectSchemaRenderer } from './ObjectSchemaRenderer';
-import { SchemaPrimitiveRenderer } from './SchemaPrimitiveRenderer';
-import type { ContentType } from './SchemaContentType';
 
 export interface OpenAPISchema {
   type?: string;
@@ -57,17 +48,7 @@ export interface ContentTypeSchema {
   encoding?: Record<string, any>;
 }
 
-// Legacy interface for backward compatibility
-interface LegacySchemaRendererProps {
-  schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject;
-  name?: string;
-  required?: boolean;
-  level?: number;
-  selectedContentType?: ContentType;
-}
-
-// New interface for the inspiration design
-interface NewSchemaRendererProps {
+export interface SchemaRendererProps {
   title: string;
   contentTypes: Record<string, ContentTypeSchema>;
   defaultContentType?: string;
@@ -76,20 +57,7 @@ interface NewSchemaRendererProps {
   variant?: 'request' | 'response';
 }
 
-export type SchemaRendererProps = LegacySchemaRendererProps | NewSchemaRendererProps;
-
-export const SchemaRenderer: React.FC<SchemaRendererProps> = (props) => {
-  // Check if this is the new interface
-  if ('title' in props) {
-    return <NewSchemaRenderer {...props} />;
-  }
-  
-  // Legacy interface
-  return <LegacySchemaRenderer {...props} />;
-};
-
-// New SchemaRenderer with inspiration design
-const NewSchemaRenderer: React.FC<NewSchemaRendererProps> = ({
+export const SchemaRenderer: React.FC<SchemaRendererProps> = ({
   title,
   contentTypes,
   defaultContentType,
@@ -216,103 +184,3 @@ const NewSchemaRenderer: React.FC<NewSchemaRendererProps> = ({
     </Paper>
   );
 };
-
-// Legacy SchemaRenderer for backward compatibility
-const LegacySchemaRenderer: React.FC<LegacySchemaRendererProps> = ({
-  schema,
-  name,
-  required,
-  level = 0,
-  selectedContentType
-}) => {
-  const [isRawView, setIsRawView] = useState(false);
-  const {
-    isReferenceObject,
-    isArraySchemaObject,
-    isObjectSchemaObject,
-    isPrimitiveSchemaObject,
-    getPropertyType
-  } = useSchemaRenderer();
-
-  // Handle anyOf, oneOf, allOf at the root level
-  if (!isReferenceObject(schema) && 'anyOf' in schema && Array.isArray(schema.anyOf)) {
-    return <ComposedSchemaRenderer keyword="anyOf" schemas={schema.anyOf as OpenAPIV3.SchemaObject[]} level={level} selectedContentType={selectedContentType} />;
-  }
-  if (!isReferenceObject(schema) && 'oneOf' in schema && Array.isArray(schema.oneOf)) {
-    return <ComposedSchemaRenderer keyword="oneOf" schemas={schema.oneOf as OpenAPIV3.SchemaObject[]} level={level} selectedContentType={selectedContentType} />;
-  }
-  if (!isReferenceObject(schema) && 'allOf' in schema && Array.isArray(schema.allOf)) {
-    // Merge allOf schemas and render as a single object
-    const merged = mergeAllOfSchemas(schema.allOf as OpenAPIV3.SchemaObject[]);
-    return <LegacySchemaRenderer schema={merged} name={name} required={required} level={level} selectedContentType={selectedContentType} />;
-  }
-
-  if (isRawView) {
-    return (
-      <Box sx={{ pl: level * 2 }}>
-        {name && (
-          <Box sx={{ mb: 1, fontWeight: 600 }}>{name}</Box>
-        )}
-        <RawViewer
-          schema={schema as OpenAPISchema}
-          contentType={selectedContentType || 'application/json'}
-        />
-      </Box>
-    );
-  }
-
-  if (isReferenceObject(schema)) {
-    return (
-      <SchemaRefRenderer
-        refValue={schema.$ref}
-        isRawView={isRawView}
-        onToggle={() => setIsRawView((v) => !v)}
-        level={level}
-      />
-    );
-  }
-
-  if (isArraySchemaObject(schema)) {
-    return (
-      <ArraySchemaRenderer
-        schema={schema}
-        name={name}
-        required={required}
-        level={level}
-        selectedContentType={selectedContentType!}
-        onToggleView={() => setIsRawView((v) => !v)}
-        isRawView={isRawView}
-      />
-    );
-  }
-
-  if (isObjectSchemaObject(schema)) {
-    return (
-      <ObjectSchemaRenderer
-        schema={schema}
-        name={name}
-        required={required}
-        level={level}
-        selectedContentType={selectedContentType!}
-        onToggleView={() => setIsRawView((v) => !v)}
-        isRawView={isRawView}
-      />
-    );
-  }
-
-  if (isPrimitiveSchemaObject(schema)) {
-    const type = getPropertyType(schema);
-    return (
-      <SchemaPrimitiveRenderer
-        schema={schema as OpenAPIV3.NonArraySchemaObject}
-        name={name}
-        required={required}
-        type={type}
-        onToggle={() => setIsRawView((v) => !v)}
-        level={level}
-      />
-    );
-  }
-
-  return null;
-}; 

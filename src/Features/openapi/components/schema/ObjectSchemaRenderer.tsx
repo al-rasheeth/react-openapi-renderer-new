@@ -2,12 +2,10 @@ import CodeIcon from '@mui/icons-material/Code';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import type { OpenAPIV3 } from "openapi-types";
-import { RawSchemaView } from "./RawSchemaView";
+import { RawViewer } from "./RawViewer";
 import type { ContentType } from "./SchemaContentType";
-import { SchemaExample } from "./SchemaExample";
 import { SchemaProperty } from "./SchemaProperty";
 import { SchemaRenderer } from "./SchemaRenderer";
-import { schemaStyles } from "./SchemaStyles";
 
 interface ObjectSchemaRendererProps {
     schema: OpenAPIV3.NonArraySchemaObject;
@@ -36,9 +34,9 @@ export const ObjectSchemaRenderer: React.FC<ObjectSchemaRendererProps> = ({
         return (
             <Box sx={{ pl: level * 2 }}>
                 {name && (
-                    <Box component="pre" sx={{ ...schemaStyles.container, mb: 1 }}>
-                        <Box component="span" sx={schemaStyles.name}>{name}</Box>
-                        {required && <Box component="span" sx={schemaStyles.required}>required</Box>}
+                    <Box sx={{ mb: 1, fontWeight: 600, fontFamily: 'monospace', fontSize: '1rem', color: '#222' }}>
+                        {name}
+                        {required && <Box component="span" sx={{ color: 'error.main', ml: 1, fontSize: '0.75rem' }}>required</Box>}
                     </Box>
                 )}
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
@@ -48,9 +46,9 @@ export const ObjectSchemaRenderer: React.FC<ObjectSchemaRendererProps> = ({
                         </IconButton>
                     </Tooltip>
                 </Box>
-                <RawSchemaView
+                <RawViewer
                     schema={schema}
-                    selectedContentType={selectedContentType}
+                    contentType={selectedContentType}
                 />
             </Box>
         );
@@ -61,7 +59,7 @@ export const ObjectSchemaRenderer: React.FC<ObjectSchemaRendererProps> = ({
             {name && (
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                     <Typography component="span" sx={{ fontWeight: 600, fontFamily: 'monospace', fontSize: '1rem', color: '#222' }}>{name}</Typography>
-                    {required && <Box component="span" sx={schemaStyles.required}>required</Box>}
+                    {required && <Box component="span" sx={{ color: 'error.main', ml: 1, fontSize: '0.75rem' }}>required</Box>}
                 </Box>
             )}
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
@@ -78,41 +76,29 @@ export const ObjectSchemaRenderer: React.FC<ObjectSchemaRendererProps> = ({
             <Typography component="span" sx={{ fontFamily: 'monospace', color: '#888', fontSize: '1.1rem', ml: 0 }}>{'{'}</Typography>
             <Box sx={{ ml: 3 }}>
                 {Object.entries(properties).map(([propName, propSchema]) => {
-                    const propType = (propSchema as OpenAPIV3.SchemaObject).type;
-                    const propFormat = (propSchema as OpenAPIV3.SchemaObject).format;
-                    const propDescription = (propSchema as OpenAPIV3.SchemaObject).description;
-                    const propExample = (propSchema as OpenAPIV3.SchemaObject).example;
-                    const propEnum = (propSchema as OpenAPIV3.SchemaObject).enum;
                     const isRequired = requiredProps.includes(propName);
                     return (
                         <SchemaProperty
                             key={propName}
                             name={propName}
-                            type={propType}
-                            required={isRequired}
-                            description={propDescription}
-                            format={propFormat}
-                            example={propExample}
-                            enum={propEnum}
-                            indent={0}
-                        >
-                            {typeof propSchema === 'object' && (propType === 'object' || propType === 'array') && (
-                                <SchemaRenderer
-                                    schema={propSchema}
-                                    name={undefined}
-                                    required={undefined}
-                                    level={level + 2}
-                                    selectedContentType={selectedContentType}
-                                />
-                            )}
-                        </SchemaProperty>
+                            schema={propSchema as any}
+                            level={0}
+                            isRequired={isRequired}
+                        />
                     );
                 })}
             </Box>
             {/* Closing curly brace */}
             <Typography component="span" sx={{ fontFamily: 'monospace', color: '#888', fontSize: '1.1rem', ml: 0 }}>{'}'}</Typography>
             {schema.example && (
-                <SchemaExample example={schema.example} />
+                <Box sx={{ mt: 2, p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
+                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
+                        Example:
+                    </Typography>
+                    <Typography component="pre" sx={{ fontFamily: 'monospace', fontSize: '0.875rem', margin: 0 }}>
+                        {JSON.stringify(schema.example, null, 2)}
+                    </Typography>
+                </Box>
             )}
         </Box>
     );

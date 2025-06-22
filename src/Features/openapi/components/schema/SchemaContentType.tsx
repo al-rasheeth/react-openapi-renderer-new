@@ -1,7 +1,6 @@
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { schemaStyles } from "./SchemaStyles";
+import { Box, Typography, Chip } from "@mui/material";
 
-export type ContentType = 'application/json' | 'application/xml' | 'application/x-www-form-urlencoded' | 'multipart/form-data';
+export type ContentType = 'application/json' | 'application/xml' | 'application/x-www-form-urlencoded' | 'multipart/form-data' | 'text/plain';
 
 interface SchemaContentTypeProps {
     contentTypes: ContentType[];
@@ -14,33 +13,30 @@ export const SchemaContentType: React.FC<SchemaContentTypeProps> = ({
     selectedType,
     onTypeChange
 }) => {
-    if (contentTypes.length <= 1) {
-        return null;
-    }
+    const getContentTypeColor = (contentType: ContentType) => {
+        if (contentType.includes('json')) return 'primary';
+        if (contentType.includes('xml')) return 'secondary';
+        if (contentType.includes('form')) return 'warning';
+        if (contentType.includes('text')) return 'info';
+        return 'default';
+    };
 
     return (
-        <Box component="pre" sx={{ ...schemaStyles.container, mb: 1 }}>
-            <FormControl size="small" sx={{ minWidth: 200 }}>
-                <InputLabel>Content Type</InputLabel>
-                <Select
-                    value={selectedType}
-                    label="Content Type"
-                    onChange={(e) => onTypeChange(e.target.value as ContentType)}
-                    sx={{
-                        '& .MuiSelect-select': {
-                            py: 0.5,
-                            fontSize: '0.875rem',
-                            fontFamily: 'monospace'
-                        }
-                    }}
-                >
-                    {contentTypes.map((type) => (
-                        <MenuItem key={type} value={type}>
-                            {type}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1 }}>
+                Content Type:
+            </Typography>
+            {contentTypes.map((contentType) => (
+                <Chip
+                    key={contentType}
+                    label={contentType}
+                    size="small"
+                    color={getContentTypeColor(contentType)}
+                    variant={selectedType === contentType ? "filled" : "outlined"}
+                    onClick={() => onTypeChange(contentType)}
+                    sx={{ cursor: 'pointer' }}
+                />
+            ))}
         </Box>
     );
 }; 
